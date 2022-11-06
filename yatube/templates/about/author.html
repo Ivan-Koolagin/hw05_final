@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h1><span style="color:blue">Привет, я Кулагин Иван</span></h1>
+    <img src="{% static 'img/kind.jpeg' %}" width="150" height="150" class="d-inline-block align-top" alt="">
+    <h3><span style="color:blue">Я начинаю путь программиста, Python разработчика.</span></h3>
+    <p>Картинки, блоки, элементы бустрап. А может быть, просто напишу несколько абзацев текста.</p>
+    <p><em>Только вперед!</em></p>
+</div>
+{% endblock %}

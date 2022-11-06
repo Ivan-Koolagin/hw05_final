@@ -81,6 +81,7 @@ class Comment(CreatedModel):
     text = models.TextField(
         verbose_name='Текст комментария',
     )
+
     class Meta:
         ordering = ['-created']
         verbose_name_plural = 'Комментарий'

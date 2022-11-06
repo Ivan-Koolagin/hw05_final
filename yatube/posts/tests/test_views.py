@@ -131,8 +131,6 @@ class TaskPagesTests(TestCase):
                 self.assertIsInstance(post_date_0, datetime)
 
 
-
-
 class ContextPaginatorViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -202,6 +200,7 @@ class ContextPaginatorViewsTest(TestCase):
                     response = self.authorized_client.get(reverse_name)
                     form_field = response.context.get('form').fields.get(value)
                     self.assertIsInstance(form_field, expected)
+
 
 class FollowViewsTest(TestCase):
     @classmethod

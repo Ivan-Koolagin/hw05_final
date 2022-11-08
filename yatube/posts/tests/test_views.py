@@ -1,5 +1,4 @@
 from datetime import datetime
-import copy
 from django import forms
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase

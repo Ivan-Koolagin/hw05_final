@@ -125,6 +125,7 @@ class PostFormTests(TestCase):
         self.assertEqual(Post.objects.count(), post_count)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
+
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostFormTests(TestCase):
     @classmethod
@@ -135,12 +136,12 @@ class PostFormTests(TestCase):
             title='Тестовая группа',
             slug='tests_lug',
             description='Тестовое описание',
-            )
+        )
         cls.post = Post.objects.create(
             author=cls.user,
             text='Тестовая запись',
             group=cls.group,
-            )
+        )
 
     def setUp(self):
         self.guest_client = Client()

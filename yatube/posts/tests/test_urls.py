@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
-
+from django.core.cache import cache
 from ..models import Group, Post
 
 User = get_user_model()
@@ -28,6 +28,7 @@ class PostModelTest(TestCase):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
+        cache.clear()
 
     def test_urls_guest(self):
         """Страницы доступные любому пользователю."""

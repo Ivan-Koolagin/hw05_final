@@ -1,8 +1,6 @@
 {% extends "base.html" %}
-{% load cache %}
 {% block title %}Последние обновления на сайте.{% endblock %}
 {% block content %}
-  {% cache 20 index_page %}
     {% include 'posts/includes/switcher.html' with follow=True %}
     <h1>Последние обновления на сайте.</h1>
     <div class="container py-5">
@@ -14,5 +12,4 @@
       {% endfor %}
       {% include 'posts/includes/paginator.html' %}
     </div>
-  {% endcache %}
 {% endblock %}

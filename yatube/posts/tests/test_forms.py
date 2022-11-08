@@ -1,5 +1,6 @@
 import shutil
 import tempfile
+from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
@@ -39,6 +40,7 @@ class PostFormTests(TestCase):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
+        cache.clear()
 
     def test_authorized_user_create_post(self):
         """Проверка создания записи авторизированным клиентом."""
@@ -103,8 +105,8 @@ class PostFormTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         post = Post.objects.first()
         self.assertEqual(post.author, self.user)
-        self.assertTrue(post.text == form_data['text'])
-        self.assertTrue(post.group_id == form_data['group'])
+        self.assertEqual(post.text, form_data['text'])
+        self.assertEqual(post.group_id, form_data['group'])
 
     def test_guest_create_post(self):
         """Проверка создания поста неавторизованным пользователем."""
@@ -122,6 +124,29 @@ class PostFormTests(TestCase):
         )
         self.assertEqual(Post.objects.count(), post_count)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
+class PostFormTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.user = User.objects.create_user(username='Test_Author')
+        cls.group = Group.objects.create(
+            title='Тестовая группа',
+            slug='tests_lug',
+            description='Тестовое описание',
+            )
+        cls.post = Post.objects.create(
+            author=cls.user,
+            text='Тестовая запись',
+            group=cls.group,
+            )
+
+    def setUp(self):
+        self.guest_client = Client()
+        self.authorized_client = Client()
+        self.authorized_client.force_login(self.user)
+        cache.clear()
 
     def test_authorized_user_create_comment(self):
         """Проверка создания коментария авторизированным клиентом."""

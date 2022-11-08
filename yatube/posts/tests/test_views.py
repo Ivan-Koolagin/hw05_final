@@ -34,6 +34,7 @@ class PagesTests(TestCase):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
+        cache.clear()
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
@@ -60,15 +61,6 @@ class PagesTests(TestCase):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
 
-    def test_cache_index_page(self):
-        """Проверка работы кеша"""
-        self.authorized_client.get(reverse('posts:index'))
-        post_to_delete = Post.objects.first()
-        post_to_find = copy.deepcopy(post_to_delete)
-        post_to_delete.delete()
-        response_1 = self.authorized_client.get(reverse('posts:index'))
-        self.assertContains(response_1, post_to_find.text)
-
     def test_cache_page(self):
         """Проверка кеширования данных."""
         post = Post.objects.create(
@@ -86,7 +78,7 @@ class PagesTests(TestCase):
         self.assertNotEqual(content_one, content_three)
 
 
-class TaskPagesTests(TestCase):
+class PostsPagesTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -105,14 +97,14 @@ class TaskPagesTests(TestCase):
 
     def setUp(self):
         self.authorized_client = Client()
-        self.authorized_client.force_login(TaskPagesTests.user)
-        self.username = TaskPagesTests.user.username
-
+        self.authorized_client.force_login(PostsPagesTests.user)
+        self.username = self.user.username
         self.link_list = (
             reverse('posts:index'),
             reverse('posts:group_list', kwargs={'slug': self.group.slug}),
             reverse('posts:profile', kwargs={'username': self.user.username}),
         )
+        cache.clear()
 
     def test_post_list_page_show_correct_context(self):
         """Шаблон сформирован с правильным контекстом."""
@@ -161,12 +153,12 @@ class ContextPaginatorViewsTest(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(ContextPaginatorViewsTest.user)
         self.username = ContextPaginatorViewsTest.user.username
-
         self.paginator_link_list = (
             reverse('posts:index'),
             reverse('posts:group_list', kwargs={'slug': self.group.slug}),
             reverse('posts:profile', kwargs={'username': self.user.username}),
         )
+        cache.clear()
 
     def test_first_page_contains_ten_records(self):
         """Проверка первой страницы."""
@@ -218,6 +210,7 @@ class FollowViewsTest(TestCase):
         self.author_client.force_login(self.post_follower)
         self.follower_client = Client()
         self.follower_client.force_login(self.post_autor)
+        cache.clear()
 
     def test_follow_on_user(self):
         count = Follow.objects.count()

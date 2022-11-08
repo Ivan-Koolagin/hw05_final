@@ -19,15 +19,15 @@
     {% endif %}
   </h1>
   <h3>Всего постов: {{ page_obj.paginator.count }}</h3>
-    {% if user.is_authenticated %}
-    {% if following %}
+
+    {% if following == 'can_unfollow' %}
       <a
         class="btn btn-lg btn-primary"
         href="{% url 'posts:profile_unfollow' author.username %}" role="button"
       >
         Отписаться
       </a>
-    {% else %}
+    {% elif following == 'can_follow' %}
         <a
           class="btn btn-lg btn-primary"
           href="{% url 'posts:profile_follow' author.username %}" role="button"
@@ -35,7 +35,7 @@
           Подписаться
         </a>
     {% endif %}
-    {% endif %}
+
   </div>
   {% for post in page_obj %}
     {% include "includes/post.html" with show_group_link=True show_profile_link=True %}

@@ -33,7 +33,8 @@ class Post(models.Model):
         help_text='Введите текст поста'
     )
     pub_date = models.DateTimeField(
-        auto_now_add=True, verbose_name='Дата публикации'
+        auto_now_add=True,
+        verbose_name='Дата публикации'
     )
     author = models.ForeignKey(
         User,
@@ -53,7 +54,8 @@ class Post(models.Model):
     image = models.ImageField(
         'Картинка',
         upload_to='posts/',
-        blank=True
+        blank=True,
+        null=True,
     )
 
     class Meta:
@@ -106,8 +108,12 @@ class Follow(CreatedModel):
     )
 
     class Meta:
-        verbose_name_plural = 'Комментарий'
-        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Подписки'
+        verbose_name = 'Подписки'
+        models.UniqueConstraint(
+            fields=['user', 'author'],
+            name='unique_follow'
+        )
 
     def __str__(self):
         return f'{self.user} подписан на {self.author}'

@@ -126,8 +126,7 @@ class PostFormTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
-@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
-class PostFormTests(TestCase):
+class CommentFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

@@ -96,7 +96,7 @@ class PostsPagesTests(TestCase):
 
     def setUp(self):
         self.authorized_client = Client()
-        self.authorized_client.force_login(PostsPagesTests.user)
+        self.authorized_client.force_login(self.user)
         self.username = self.user.username
         self.link_list = (
             reverse('posts:index'),
@@ -110,7 +110,6 @@ class PostsPagesTests(TestCase):
         for reverse_name in self.link_list:
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
-
                 first_object = response.context['page_obj'][0]
                 post_author_0 = first_object.author.username
                 post_text_0 = first_object.text
